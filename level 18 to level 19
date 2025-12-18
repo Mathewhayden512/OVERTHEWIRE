@@ -1,0 +1,20 @@
+Bandit Level 18 → Level 19
+
+In Bandit Level 18, logging in normally does not give an interactive shell because the session 
+exits immediately after login. To bypass this, I executed a command directly while connecting
+via SSH.
+
+I used the following command to read the readme file during login:
+ssh bandit18@bandit.labs.overthewire.org -p 2220 cat readme
+
+When prompted, I entered the Level 18 password. Instead of logging out immediately, the 
+command was executed, and the contents of the readme file were displayed. This file 
+contained the password for the next level:
+cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8
+
+After obtaining the password, I logged into Bandit Level 19 using SSH:
+ssh bandit19@bandit.labs.overthewire.org -p 2220
+
+I entered the retrieved password, and the login was successful.
+This confirmed that the password obtained from the readme file was correct, and
+I was able to access Bandit Level 19.
