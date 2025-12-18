@@ -1,0 +1,55 @@
+Bandit Level 16 → 17 Write-up
+
+Goal
+Obtain access to bandit17.
+Unlike previous levels, the password is not a simple string — it is provided via an SSH private key exposed by a service running on localhost.
+
+Step 1: Understand the Hint
+The level hint says (paraphrased):
+The credentials for the next level are available by connecting to services running on ports 31000–32000.
+
+Step 2: Scan for Open Ports
+You scanned the port range locally:
+nmap localhost -p 31000-32000
+This identifies which ports are listening and worth connecting to.
+
+Step 3: Connect to the SSL Service
+One of the open ports responds with data over SSL.
+When you connect to it (using openssl s_client), instead of a password, it returns:
+
+-----BEGIN RSA PRIVATE KEY-----
+...
+-----END RSA PRIVATE KEY-----
+This is not random output — it is a valid SSH private key.
+
+Key insight:
+Bandit17 authenticates using SSH key-based authentication, not a password.
+
+Step 4: Save the Private Key
+On your local machine, you saved the key to a file:
+vim key
+Then you fixed the permissions:
+chmod 400 key
+
+Why this is required
+SSH refuses to use private keys that are:
+World-readable
+Group-readable
+Writable by others
+chmod 400 ensures only you can read the key.
+
+Step 5: SSH Using the Key
+You then logged in using:
+ssh -i key bandit17@bandit.labs.overthewire.org -p 2220
+
+Because:
+The username is bandit17
+The private key matches the server’s authorized key
+Permissions are correct
+SSH grants access without prompting for a password.
+
+Step 6: Successful Login
+You are now logged in as:
+bandit17@bandit
+
+This confirms the private key was valid and the level is solved.
