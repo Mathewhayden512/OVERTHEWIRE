@@ -1,0 +1,40 @@
+Bandit Level 19 → Level 20
+
+After logging into Bandit Level 19, I listed the files in the home directory:
+ls
+
+I found a file named bandit20-do. To understand what kind of file it was, I checked it using:
+file bandit20-do
+
+The output showed that bandit20-do is a setuid ELF executable.
+I then verified its permissions:
+ls -l bandit20-do
+
+
+The permissions included the setuid bit, and the file was owned by user bandit20. 
+This indicated that the program runs with bandit20’s privileges, even when executed by
+bandit19.
+When I ran the program without arguments, it displayed a help message:
+./bandit20-do
+
+It explained that the program allows running a command as another user.
+To confirm this behavior, I executed:
+./bandit20-do whoami
+
+The output was:
+bandit20
+
+This confirmed that commands run through bandit20-do execute as the bandit20 user.
+
+Knowing that Bandit passwords are stored in /etc/bandit_pass/, I used the program to read the
+password file for bandit20:
+./bandit20-do cat /etc/bandit_pass/bandit20
+This command revealed the password for the next level:
+0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+
+
+After obtaining the password, I exited the session and logged into Bandit Level 20 using SSH:
+ssh bandit20@bandit.labs.overthewire.org -p 2220
+
+
+I entered the retrieved password, and the login was successful. This confirmed that the setuid executable was used correctly to escalate privileges and access the next level.
