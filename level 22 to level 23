@@ -1,0 +1,42 @@
+Bandit Level 22 → Level 23
+
+After logging into Bandit Level 22, I investigated the cron jobs running on the system, 
+as this level focuses on scheduled tasks. I navigated to the cron directory:
+cd /etc/cron.d
+
+I listed the available cron job files:
+ls
+From the list, cronjob_bandit23 was relevant, so I opened it:
+cat cronjob_bandit23
+
+The file showed that a script named /usr/bin/cronjob_bandit23.sh is executed every minute
+and at reboot as user bandit23.
+Next, I examined the script itself:
+cat /usr/bin/cronjob_bandit23.sh
+
+The script performs the following actions:
+Stores the current username using whoami
+Generates an MD5 hash from the string I am user <username>
+Uses this hash as a filename
+Copies the password file of that user into /tmp/<hash>
+
+Since the cron job runs as bandit23, the password for bandit23 is written to a predictable
+file in /tmp.
+To reproduce the filename, I manually generated the same MD5 hash for user bandit23:
+echo I am user bandit23 | md5sum | cut -d ' ' -f 1
+
+This produced the following hash:
+8ca319486bfbbc3663ea0fbe81326349
+
+Knowing the filename, I read the contents of the file in /tmp:
+cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+
+This revealed the password for the next level:
+0Zf11ioIjMVN551jX3CmStKLYqjk54Ga
+
+
+After obtaining the password, I exited the session and logged into Bandit Level 23 using SSH:
+ssh bandit23@bandit.labs.overthewire.org -p 2220
+
+
+I entered the retrieved password, and the login was successful, confirming that the cron job logic was correctly analyzed and exploited.
