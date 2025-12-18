@@ -1,0 +1,29 @@
+Bandit 14 → Bandit 15 Write-up
+
+Objective
+Obtain the password for bandit15 by sending the current password to a local service running on port 30000.
+
+Steps
+
+1.Verify the current password
+cat /etc/bandit_pass/bandit14
+
+
+2.Connect to the local service
+nc localhost 30000
+
+3.Submit the password
+Paste the bandit14 password when prompted:
+MU4VWeTyJk8ROof1qqmcBPaLh7lDCPvS
+
+4.Receive the next password
+The service responds with:
+Correct!
+8xCjnmgoKbGLhHFAZlGE5Tmu4M2tKJQo
+
+5.Log in to bandit15
+ssh bandit15@bandit.labs.overthewire.org -p 2220
+
+Result
+The password for bandit15 was successfully retrieved using a local Netcat connection.
+
