@@ -1,0 +1,21 @@
+Bandit Level 17 → Level 18
+
+In this level, I was given two files: passwords.old and passwords.new. The task was to find the password for the next level by comparing these two files.
+To do this, I used the diff command:
+diff passwords.old passwords.new
+
+
+The output showed that line was different in both files:
+42c42
+< BMIOFKM7CRSLI97voLp3TD80NAq5exxk
+---
+> x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+
+This means the old password was replaced with a new one. Since the correct password is the updated value, I took the string from passwords.new:
+x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+
+After noting down the password, I exited the current session and logged into the next level using SSH:
+ssh bandit18@bandit.labs.overthewire.org -p 2220
+
+I entered the new password when prompted. The login was successful, and I reached Bandit
+Level 18, confirming that the password obtained from the diff command was correct.
