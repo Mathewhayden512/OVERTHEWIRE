@@ -1,0 +1,40 @@
+Bandit Level 21 → Level 22
+
+After logging into Bandit Level 21, I knew that this level involved cron jobs,
+so I navigated to the cron configuration directory:
+cd /etc/cron.d
+
+I listed the contents of the directory to see which cron jobs were available:
+ls
+
+Among the listed files, cronjob_bandit22 stood out. I opened this file to inspect its
+contents:
+cat cronjob_bandit22
+
+The output showed that a script named /usr/bin/cronjob_bandit22.sh is executed every 
+minute as user bandit22, as well as at system reboot:
+@reboot bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+* * * * * bandit22 /usr/bin/cronjob_bandit22.sh &> /dev/null
+
+Next, I examined the script being executed by the cron job:
+cat /usr/bin/cronjob_bandit22.sh
+
+The script contained the following commands:
+chmod 644 /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+cat /etc/bandit_pass/bandit22 > /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+From this, I understood that the cron job copies the password for bandit22 
+from /etc/bandit_pass/bandit22 into a file located in /tmp/, and then changes its permissions
+to be world-readable.
+Since /tmp is accessible to all users, I simply read the contents of that file:
+cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+
+This revealed the password for the next level:
+tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q
+
+
+After obtaining the password, I exited the session and logged into Bandit Level 22 using SSH:
+ssh bandit22@bandit.labs.overthewire.org -p 2220
+
+
+I entered the retrieved password, and the login was successful, confirming that the cron job had been used correctly to access the next level.
