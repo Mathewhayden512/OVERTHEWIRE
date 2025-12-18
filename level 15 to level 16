@@ -1,0 +1,62 @@
+
+Bandit Level 15 → 16 
+
+Goal
+Retrieve the password for bandit16 by connecting to a service running on localhost:30001 using SSL/TLS.
+
+Key Hint from the Level
+
+> The password for the next level can be retrieved by submitting the password of the current level to port 30001 on localhost using SSL encryption.
+
+So:
+* Plain `nc` will not work
+* You must use an SSL/TLS client
+
+Tool Used
+`openssl s_client`
+This tool allows you to manually establish an SSL/TLS connection and interact with the service.
+
+Command Used
+bash openssl s_client -connect localhost:30001
+
+What Happens During Connection
+
+1. TLS Handshake
+
+   * The server presents a self-signed certificate (`CN = SnakeOil`)
+   * OpenSSL reports:
+     verify error:num=18:self-signed certificate
+   * This is expected and safe for this challenge
+
+2. Secure Connection Established
+
+   * TLS version: TLSv1.3
+   * Cipher: TLS_AES_256_GCM_SHA384
+   * Connection is encrypted despite the warning
+
+3. Manual Input Phase
+
+   *After the handshake, the server waits for input
+   * You paste the Bandit15 password
+   * The server validates it
+
+4. Server Response
+
+   * On success, the server prints:
+     Correct!
+     <password-for-bandit16>
+   * The connection then closes
+
+Why the Certificate Warning Can Be Ignored
+
+* The challenge uses a self-signed cert
+* You are connecting to `localhost`
+* Certificate validation is irrelevant here because:
+ * No MITM risk
+ * You only need encrypted transport
+
+Result
+* The server returns the Bandit16 password
+* You successfully log in using:
+bash ssh bandit16@bandit.labs.overthewire.org -p 2220
+
