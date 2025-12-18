@@ -1,0 +1,26 @@
+Bandit 13 → Bandit 14 
+
+Objective
+
+Log in to bandit14 using the private SSH key provided in bandit13, instead of a password.
+
+Steps
+
+1. Exit bandit13
+bash exit
+
+2. Copy the private SSH key to your local machine
+bash scp -P 2220 bandit13@bandit.labs.overthewire.org:~/sshkey.private .
+
+3. Fix file permissions
+   SSH requires private keys to be readable only by the owner.
+   bash chmod 600 sshkey.private
+
+4. Log in using the private key
+bash ssh -i sshkey.private bandit14@bandit.labs.overthewire.org -p 2220
+
+5. Retrieve the password for bandit14
+bash cat /etc/bandit_pass/bandit14
+
+Result
+successfully authenticated to bandit14 using key-based SSH authentication and retrieved the password for the next level.
