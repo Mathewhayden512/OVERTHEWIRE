@@ -1,6 +1,6 @@
 
 level 0 to level 1:
-password for level 1: ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If
+password for bandit 1: ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If
 
 
 
@@ -18,7 +18,7 @@ The password you are looking for is: ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If
 bandit0@bandit:~$ exit
 logout
 Connection to bandit.labs.overthewire.org closed.
-kanimozhi_s@LAPTOP-QB661LHS:~$ ssh bandit1@bandit.labs.overthewire.org -p 2220
+mathew_hayden@LAPTOP-QB661LHS:~$ ssh bandit1@bandit.labs.overthewire.org -p 2220
                          _                     _ _ _
                         | |__   __ _ _ __   __| (_) |_
                         | '_ \ / _` | '_ \ / _` | | __|
